@@ -1,7 +1,7 @@
-import colorsys as coloursys
-
-from PIL import Image
 from time import time
+
+import numpy
+from PIL import Image
 
 # Oof, this is painful.
 Image._decompression_bomb_check = lambda _: _
@@ -9,15 +9,7 @@ Image._decompression_bomb_check = lambda _: _
 
 def load(filepath):
     image = Image.open(filepath).convert("1")
-    pixels = image.load()
-
-    grid = []
-    for i in range(image.width):
-        grid.append([])
-        for j in range(image.height):
-            grid[i].append(pixels[j, i])
-
-    return grid
+    return list(numpy.array(image).tolist())
 
 
 def navigate(maze, start=None, end=None):
@@ -76,7 +68,7 @@ def save(maze, file: str):
     pixels = image.load()
 
     # Draw each point of the path onto the image
-    for i, point in enumerate(path):
+    for point in path:
         pixels[point] = (255, 0, 0)
 
     print("Saving to file...")
